@@ -1,18 +1,26 @@
 import mongoose, { Schema } from 'mongoose';
-import { ref } from 'process';
+import shortid from  'shortid';
 
 const expenseSchema = new mongoose.Schema(
   {
-    expenseType: { enum: [ "Food", "Transportation", "Other" ], required: true },
-    amount: { type: Number, required: true, unique: true },
-    user:[{
-        type:Schema.Types.ObjectId,
-        ref:"Users"
-    }]
+
+
+    _id: { type: String, default: shortid.generate }, 
+
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: String, enum: ["Food", "Transport", "Entertainment", "Others"], required: true },
+    amount: { type: Number, required: true },
+    date: { type: Date, required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+
   },
   { timestamps: true }
 );
 
-const Expense = mongoose.model('User', userSchema);
+const Expense = mongoose.model('Expenses', expenseSchema);
 
 export default Expense;

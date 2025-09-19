@@ -1,17 +1,16 @@
 import express from 'express';
 import createUser from '../controllers/userController.js';
+import verifyToken from '../middlewares/authMiddleware.js';
+import User from '../models/user.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
 
 const router = express.Router();
 
-router.get('/test', (req, res) => {
-  console.log('GET /api/users/test route hit');
-  res.send('Test route is working!');
-});
-
-router.post('/', (req, res, next) => {
-  console.log('POST /api/users route hit');
-  console.log('Request body:', req.body);
+router.post('/register', (req, res, next) => {
   next();
 }, createUser);
+
 
 export default router;

@@ -1,22 +1,25 @@
 import User from '../models/user.js';
-
+import bcrypt from 'bcryptjs';
 const createUser = async (req, res) => {
-      console.log('Incoming POST /api/users');
+
   const { name, email, password } = req.body;
-console.log("name",name);
+
+  const plainPassword = req.body.password;
+
+  const salt = await bcrypt.genSalt(10);
+
+  const hashedPassword = await bcrypt.hash(plainPassword, salt);
+
   try {
     const newUser = new User({
       name,
       email,
-      password
+      password: hashedPassword
     });
 
     const savedUser = await newUser.save();
-    console.log('User created:', savedUser);
-
     res.status(201).json(savedUser);
   } catch (error) {
-    console.error('Error creating user:', error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 };
